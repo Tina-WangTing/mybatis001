@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE configuration
+                PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<!--1.读取数据库属性文件-->
+<properties resource="database.properties"></properties>
+<!--4.配置log4j日志-->
+<settings>
+    <setting name="logImpl" value="LOG4J"/>
+</settings>
+<!--4.简化包名 -->
+<typeAliases>
+    <!--扫描pojo包  生成别名  在mapper.xml resultType 属性下使用-->
+    <!--<package name="com.wt.pojo"/>-->
+</typeAliases>
+
+<!--2.配置数据库环境 可以配置多个数据源
+default：默认加载哪一个数据源-->
+<environments default="cs">
+    <!--配置数据源mysql id=“自定义的数据源”-->
+    <environment id="cs">
+        <!--采用jdbc事务管理方式-->
+        <transactionManager type="jdbc"></transactionManager>
+        <!--指定数据源连接技术
+        type：pooled mybatis支持技术
+        unpooled 不采用任何技术
+        jndi：项目运行使用jndi连接池技术-->
+        <dataSource type="pooled">
+            <!--配置四个参数 name="写死的名称"
+            value=“${数据库属性文件中的四个属性名}”-->
+            <property name="driver" value="${driver}"/>
+            <property name="url" value="${url}"/>
+            <property name="username" value="${user}"/>
+            <property name="password" value="${password}"/>
+        </dataSource>
+    </environment>
+</environments>
+
+<!--3.读取mapper文件，读取某一个接口实现类-->
+<mappers>
+    <mapper resource="mappers/ProviderMapper.xml"></mapper>
+</mappers>
+
+
+</configuration>

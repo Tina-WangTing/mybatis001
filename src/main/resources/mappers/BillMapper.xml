@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace:命名空间（完全限定名） 指定你要哪一个接口的实现类-->
+<mapper namespace="com.wt.dao.BillDao">
+    <select id="getByproNameAndByproDesc" resultType="com.wt.pojo.Provider">
+        select
+        proCode,
+        proName,
+        proDesc,
+        proContact from smbms_provider
+        --         where标签条件成立自动添加where反之取消会同时自动取消和添加and
+        --         prefix:在sql语句前添加前缀
+        --         prefixOverrides:在sql语句前删除前缀
+        --         suffix:在sql语句后添加后缀
+        --         suffixOverrides:在sql语句后删除后缀
+        <!--<where>-->
+        <trim prefix="where" prefixOverrides="and">
+            <if test="proName!=null">
+                proName like concat('%',#{proName},'%')
+            </if>
+            <if test="proDesc!=null">
+                and proDesc like concat('%',#{proDesc},'%')
+            </if>
+            <!--</where>-->
+        </trim>
+    </select>
+
+    <!--动态sql更新-->
+    <!--优化sql语句改变原来的部分信息其他参数不变-->
+
+    <update id="updateProvider">
+        update smbms_provider
+        <set>
+            <if test="proName!=null">
+                proName=#{proName},
+            </if>
+            <if test="proDesc!=null">
+                proDesc=#{proDesc},
+            </if>
+        </set>
+        <where>
+            <if test="id!=null">
+                id=#{id},
+            </if>
+
+        </where>
+
+    </update>
+
+    <insert id="addProvider">
+
+        --         insert into smbms_provider(proCode,proName,proDesc,proContact)
+        --         values (#{proCode},#{proName},#{proDesc},#{proContact})
+
+
+        insert into smbms_provider
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="proCode!=null">proCode,</if>
+            <if test="proName!=null">proName,</if>
+            <if test="proDesc!=null">proDesc,</if>
+            <if test="proContact!=null">proContact,</if>
+        </trim>
+
+        values
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="proCode!=null">#{proCode},</if>
+            <if test="proName!=null">#{proName},</if>
+            <if test="proDesc!=null">#{proDesc},</if>
+            <if test="proContact!=null">#{proContact},</if>
+        </trim>
+        where id=#{id}
+
+    </insert>
+
+    <delete id=""></delete>
+
+</mapper>

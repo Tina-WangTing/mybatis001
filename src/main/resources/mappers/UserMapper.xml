@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <!--namespace:命名空间（完全限定名） 指定你要哪一个接口的实现类-->
+<mapper namespace="com.wt.dao.UserDao">
+    <!--id:指定你要实现的方法的名字
+      parameterType：参数数据类型，默认是int，可写可不写
+       resultType：返回的是哪一个类的对象
+        （完全限定的这个类路径）-->
+
+
+     <select id="findUserList" resultType="com.wt.pojo.User">
+         select
+         id,
+         userCode,
+         userName,
+         userPassword,
+         birthday,
+         gender  from smbms_user where gender  = #{gender }
+         and userName like concat(#{userName},'%')
+    </select>
+    <!--#:占位符 $:原样输出  gender=#{gender}  表字段名=#{实体类属性名}
+        -->
+   <!-- 模糊查询 concat(#{u},'%') 孙..    concat('%',#{u})  ..孙  concat('%',#{u}，'%') ...
+    -->
+    <!--<select id="get"   resultType="User">-->
+        <!--SELECT * FROM smbms_user  where gender=#{gender}-->
+        <!--and  userName like concat(#{userName},'%')-->
+    <!--</select>-->
+
+    <update id="updateUser" >
+        UPDATE  smbms_user set userName=#{user.userName} where id=#{user.id}
+    </update>
+    <!--&lt;!&ndash;id=#{id}    表字段名=#{Map的key}   #:占位符 $:原样输出&ndash;&gt;-->
+    <!--<select id="find" resultType="User">-->
+        <!--select * from smbms_user where gender=#{sex} and userName like concat(#{name},'%')-->
+    <!--</select>-->
+    <delete id="deleteUser" >
+         delete from smbms_user where id=#{id}
+    </delete>
+
+
+
+    <insert id="addUser">
+        insert into smbms_user (id,userName)values(#{id},#{userName})
+    </insert>
+
+
+    <!--/**-->
+    <!--* 根据用户id获取对象-->
+    <!--*/-->
+    <!--手动映射-->
+    <!--<resultMap id="aa" type="User">-->
+        <!--<id property="id" column="id"/>-->
+        <!--<result property="userName" column="userNmae"/>-->
+        <!--<association property="userRole" javaType="Role">-->
+            <!--<id property="id" column="id"/>-->
+            <!--<result property="roleName" column="roleName"/>-->
+        <!--</association>-->
+    <!--</resultMap>-->
+    <!--一对一查询-->
+    <!--<select id="findUserRoleById" resultMap="aa">-->
+        <!--select * from smbms_user a-->
+        <!--left join smbms_role b on a.userRole=b.id-->
+        <!--where a.id=#{userid}-->
+
+    <!--</select>-->
+
+
+    <!--一对多查询-->
+    <!--<resultMap id="bb" type="User">-->
+        <!--<id property="id" column="id"/>-->
+        <!--<result property="userName" column="userName"/>-->
+        <!--<collection property="addressList" ofType="Address">-->
+            <!--<id property="id" column="id"/>-->
+            <!--<result property="addressDesc" column="addressDesc"/>-->
+        <!--</collection>-->
+    <!--</resultMap>-->
+
+    <!--<select id="findUserAddressById" resultMap="bb">-->
+        <!--select * from smbms_user a-->
+        <!--left join smbms_address b-->
+        <!--on a.id=b.userId where a.id =#{id}-->
+    <!--</select>-->
+
+</mapper>
